@@ -2,7 +2,9 @@ package br.com.diogouoma.gestao_vagas.modules.candidate.controller;
 
 import br.com.diogouoma.gestao_vagas.modules.candidate.entities.CandidateEntity;
 import br.com.diogouoma.gestao_vagas.modules.candidate.useCase.CreateCandidateUseCase;
+import br.com.diogouoma.gestao_vagas.modules.candidate.useCase.ListAllJobsByFilterUseCase;
 import br.com.diogouoma.gestao_vagas.modules.candidate.useCase.ProfileCandidateUseCase;
+import br.com.diogouoma.gestao_vagas.modules.company.entities.JobEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -21,6 +24,9 @@ public class CandidateController {
 
     @Autowired
     private ProfileCandidateUseCase profileCandidateUseCase;
+
+    @Autowired
+    private ListAllJobsByFilterUseCase listAllJobsByFilterUseCase;
 
     @PostMapping("/")
     public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidateEntity) {
@@ -45,6 +51,12 @@ public class CandidateController {
         }
 
 
+    }
+
+    @GetMapping("/job")
+    @PreAuthorize("hasRole('cadidate')")
+    public List<JobEntity> findJobByFilter(@RequestParam String filter) {
+        return this.listAllJobsByFilterUseCase.execute(filter);
     }
 
 
