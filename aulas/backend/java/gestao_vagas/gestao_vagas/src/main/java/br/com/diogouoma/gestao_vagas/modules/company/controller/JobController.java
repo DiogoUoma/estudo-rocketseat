@@ -3,6 +3,8 @@ package br.com.diogouoma.gestao_vagas.modules.company.controller;
 import br.com.diogouoma.gestao_vagas.modules.company.dto.CreateJobDTO;
 import br.com.diogouoma.gestao_vagas.modules.company.entities.JobEntity;
 import br.com.diogouoma.gestao_vagas.modules.company.useCase.CreateJobUseCase;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ public class JobController {
 
     @PostMapping("/")
     @PreAuthorize("hasRole('COMPANY')")
+    @Tag(name = "Vagas", description = "Informações das vagas")
+    @Operation(summary = "Cadastro de vagas", description = "Função responsavel por cadastro de vagas dentro da empresa")
     public JobEntity create(@Valid @RequestBody CreateJobDTO createJobDTO, HttpServletRequest request) {
         var companyId = request.getAttribute("company_id");
 
