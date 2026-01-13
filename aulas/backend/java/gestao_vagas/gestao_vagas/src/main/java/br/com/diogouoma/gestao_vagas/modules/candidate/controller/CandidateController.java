@@ -1,5 +1,6 @@
 package br.com.diogouoma.gestao_vagas.modules.candidate.controller;
 
+import br.com.diogouoma.gestao_vagas.modules.candidate.dto.ProfileCandidateResponseDTO;
 import br.com.diogouoma.gestao_vagas.modules.candidate.entities.CandidateEntity;
 import br.com.diogouoma.gestao_vagas.modules.candidate.useCase.CreateCandidateUseCase;
 import br.com.diogouoma.gestao_vagas.modules.candidate.useCase.ListAllJobsByFilterUseCase;
@@ -48,6 +49,14 @@ public class CandidateController {
 
     @GetMapping("/")
     @PreAuthorize("hasRole('candidate')")
+    @Tag(name = "Candidato", description = "Informações do candidato")
+    @Operation(summary = "Perfil do candidato", description = "Função responsavel por buscar informações do candidato")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(schema = @Schema(implementation = ProfileCandidateResponseDTO.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "User not found")
+    })
     public ResponseEntity<Object> get(HttpServletRequest request) {
 
         var idCandidate = request.getAttribute("candidate_id");
@@ -72,7 +81,6 @@ public class CandidateController {
                     )
             })
     })
-
     @SecurityRequirement(name = "jwt_auth")
     public List<JobEntity> findJobByFilter(@RequestParam String filter) {
         return this.listAllJobsByFilterUseCase.execute(filter);

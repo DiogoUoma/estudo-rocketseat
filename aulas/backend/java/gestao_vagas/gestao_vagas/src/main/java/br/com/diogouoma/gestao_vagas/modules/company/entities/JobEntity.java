@@ -22,7 +22,7 @@ public class JobEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Schema(example = "Vaga para design")
+    @Schema(example = "Vaga para design ")
     private String description;
 
     private String benefits;
