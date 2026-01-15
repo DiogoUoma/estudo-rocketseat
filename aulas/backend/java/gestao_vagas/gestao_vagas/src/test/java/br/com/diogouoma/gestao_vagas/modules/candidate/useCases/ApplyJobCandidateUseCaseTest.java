@@ -1,6 +1,8 @@
 package br.com.diogouoma.gestao_vagas.modules.candidate.useCases;
 
+import br.com.diogouoma.gestao_vagas.exceptions.JobNotFoundException;
 import br.com.diogouoma.gestao_vagas.exceptions.UserNotFoundException;
+import br.com.diogouoma.gestao_vagas.modules.candidate.entities.CandidateEntity;
 import br.com.diogouoma.gestao_vagas.modules.candidate.repository.CandidateRepository;
 import br.com.diogouoma.gestao_vagas.modules.candidate.useCase.ApplyJobCandidateUseCase;
 import br.com.diogouoma.gestao_vagas.modules.company.repositories.JobRepository;
@@ -12,7 +14,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ApplyJobCandidateUseCaseTest {
@@ -27,14 +34,32 @@ public class ApplyJobCandidateUseCaseTest {
     private JobRepository jobRepository;
 
     @Test
-    @DisplayName("Should not be able to aplly job with candidate not found")
+    @DisplayName("Should not be able to apply job with candidate not found")
     public void should_not_be_able_to_apply_job_with_candidate_not_found(){
         try {
             applyJobCandidateUseCase.execute(null, null);
         } catch(Exception e) {
             assertThat(e).isInstanceOf(UserNotFoundException.class);
         }
+    }
 
+
+    @Test
+    @DisplayName("Should not be able to apply job with job not found")
+    public void should_not_be_able_to_apply_job_with_job_not_found() {
+
+        var idCandidate = UUID.randomUUID();
+
+        var candidate = new CandidateEntity();
+        candidate.setId(idCandidate);
+
+        when(candidateRepository.findById(idCandidate)).thenReturn(Optional.of(candidate));
+
+        try {
+            applyJobCandidateUseCase.execute(idCandidate, null);
+        } catch (Exception e) {
+            assertThat(e).isInstanceOf(JobNotFoundException.class);
+        }
     }
 
 

@@ -4,6 +4,7 @@ import br.com.diogouoma.gestao_vagas.exceptions.JobNotFoundException;
 import br.com.diogouoma.gestao_vagas.exceptions.UserNotFoundException;
 import br.com.diogouoma.gestao_vagas.modules.candidate.repository.CandidateRepository;
 import br.com.diogouoma.gestao_vagas.modules.company.repositories.JobRepository;
+import br.com.diogouoma.gestao_vagas.modules.repository.ApplyJobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,9 @@ public class ApplyJobCandidateUseCase {
 
     @Autowired
     private JobRepository jobRepository;
+
+    @Autowired
+    private ApplyJobRepository applyJobRepository;
 
     //Id candidato
     //id da vaga
